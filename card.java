@@ -11,6 +11,7 @@ public class card {
         numValue=n;
         cardValue=assignVal(n);
     }
+
     private String assignVal(int n){
         switch (n){
             case 13:
@@ -25,4 +26,5 @@ public class card {
                 return Integer.toString(n);
         }
     }
+
 }

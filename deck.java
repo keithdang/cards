@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class deck {
-    private card [] deckArr=new card[52];
+    public card [] deckArr=new card[52];
     private int count=0;
     public deck(){
         String [] suits={"Spades","Hearts","Clubs","Diamonds"};
@@ -12,6 +12,9 @@ public class deck {
     }
     public void shuffleDeck(){
         Collections.shuffle(Arrays.asList(deckArr));
+    }
+    public void reorderHand(int start, int end){
+        quickSort(start,end-1,deckArr);
     }
     public void reorderDeck(){
         quickSort(0,deckArr.length-1,deckArr);
