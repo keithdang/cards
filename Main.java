@@ -6,8 +6,9 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
         deck deckOb=new deck();
-        deckOb.printDeck();
+//        deckOb.printDeck();
         deckOb.shuffleDeck();
+        deckOb.reorderDeck();
         deckOb.printDeck();
     }
 }
