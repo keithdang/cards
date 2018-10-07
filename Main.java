@@ -1,10 +1,15 @@
 package com.company;
+import sun.util.locale.provider.SPILocaleProviderAdapter;
+
 import java.util.Collections;
 import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
+        president();
+    }
+    public static void normal(){
         deck deckOb=new deck();
 //        deckOb.printDeck();
         deckOb.shuffleDeck();
@@ -12,6 +17,11 @@ public class Main {
         //deckOb.printDeck();
         deckOb.reorderHand(0,13);
         splitCards(deckOb,4);
+    }
+    public static void president(){
+        president pres=new president();
+        pres.shuffleDeck();
+        pres.splitAndOrderCards(4);
     }
     public static void splitCards(deck deckOb,int splitNum){
         System.out.println("Your hand");
