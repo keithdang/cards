@@ -5,6 +5,7 @@ public class card {
     String suit;
     int numValue;
     String cardValue;
+    boolean active=true;
     public card(int n,String suit,int id){
         this.suit=suit;
         this.id=id;

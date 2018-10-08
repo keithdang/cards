@@ -1,5 +1,6 @@
 package com.company;
-
+import java.util.InputMismatchException;
+import java.util.Scanner;
 public class president extends deck{
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
@@ -43,16 +44,42 @@ public class president extends deck{
             reorderHand(ratio*i,(ratio)*(i+1));
             if(i==0){
                 System.out.println("Your hand");
-            }else{
-                System.out.println("Opponents hand");
+                printHand(ratio*i,(ratio)*(i+1));
             }
-            printHand(ratio*i,(ratio)*(i+1));
+//             else{
+//                System.out.println("Opponents hand");
+//            }
+//            printHand(ratio*i,(ratio)*(i+1));
         }
+    }
+    public void searchCard(){
+        Scanner reader=new Scanner(System.in);
+        System.out.println("Enter index:");
+        try{
+            int n=reader.nextInt();
+            System.out.println("You chose:"+n);
+            if(n>=0 && n<13){
+                printCard(n);
+            }else{
+                System.out.println("Not in range, try again");
+                searchCard();
+            }
 
+        }
+        catch(InputMismatchException a){
+            System.out.println("You did not input a number");
+            searchCard();
+        }
+        reader.close();
     }
     private void printHand(int start,int end){
         for(int i=start;i<end;i++){
-            System.out.println(deckArr[i].cardValue + " of " +deckArr[i].suit);
+            if(deckArr[i].active){
+                printCard(i);
+            }
         }
+    }
+    private void printCard(int i){
+        System.out.println(i+")"+deckArr[i].cardValue + " of " +deckArr[i].suit);
     }
 }
