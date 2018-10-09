@@ -44,7 +44,12 @@ public class president extends deck{
         int mid=l+(r-l)/2;
         int midCard=presValues(deckArr[mid].numValue);
         int searchCard=presValues(deckArr[x].numValue);
-        return binaryCompare(l,r,x,mid,midCard,searchCard);
+        if(deckArr[r].numValue<deckArr[x].numValue){
+            System.out.println("No cards available");
+            return -1;
+        }else{
+            return binaryCompare(l,r,x,mid,midCard,searchCard);
+        }
     }
     public void splitAndOrderCards(int splitNum){
         int ratio=deckArr.length/splitNum;
@@ -69,7 +74,6 @@ public class president extends deck{
             if(n>=0 && n<13 && deckArr[n].active){
                 printCard(n);
                 deckArr[n].setActive(false);
-
                 System.out.println("Your hand");
                 printHand(0,12);
                 activateCard(n);
@@ -88,9 +92,13 @@ public class president extends deck{
     public void search(){
         System.out.println("RANDO:"+activeCardIndex);
         printHand(13,26);
-        int index=binarySearch(13,26,activeCardIndex);
-        System.out.print("Found:");
-        deckArr[index].printCard();
+        int index=binarySearch(13,25,activeCardIndex);
+        if(index!=-1){
+            System.out.print("Found:");
+            deckArr[index].printCard();
+        }else{
+            System.out.print("No cards available");
+        }
     }
     public void activateCard(int n){
         if(activeCardIndex==-1){
