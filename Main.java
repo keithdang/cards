@@ -23,6 +23,7 @@ public class Main {
         pres.shuffleDeck();
         pres.splitAndOrderCards(4);
         pres.searchCard();
+        pres.search();
     }
     public static void splitCards(deck deckOb,int splitNum){
         System.out.println("Your hand");

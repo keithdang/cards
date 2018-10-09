@@ -12,7 +12,9 @@ public class card {
         numValue=n;
         cardValue=assignVal(n);
     }
-
+    public void setActive(boolean bool){
+        active=bool;
+    }
     private String assignVal(int n){
         switch (n){
             case 13:
@@ -27,5 +29,7 @@ public class card {
                 return Integer.toString(n);
         }
     }
-
+    public void printCard(){
+        System.out.print(cardValue + " of "+suit+"\n");
+    }
 }

@@ -2,6 +2,8 @@ package com.company;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 public class president extends deck{
+    int activeCardIndex=-1;
+
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
     }
@@ -38,6 +40,12 @@ public class president extends deck{
             return num;
         }
     }
+    public int binarySearch(int l,int r, int x){
+        int mid=l+(r-l)/2;
+        int midCard=presValues(deckArr[mid].numValue);
+        int searchCard=presValues(deckArr[x].numValue);
+        return binaryCompare(l,r,x,mid,midCard,searchCard);
+    }
     public void splitAndOrderCards(int splitNum){
         int ratio=deckArr.length/splitNum;
         for(int i=0;i<splitNum;i++){
@@ -58,19 +66,38 @@ public class president extends deck{
         try{
             int n=reader.nextInt();
             System.out.println("You chose:"+n);
-            if(n>=0 && n<13){
+            if(n>=0 && n<13 && deckArr[n].active){
                 printCard(n);
+                deckArr[n].setActive(false);
+
+                System.out.println("Your hand");
+                printHand(0,12);
+                activateCard(n);
+                //searchCard();
             }else{
                 System.out.println("Not in range, try again");
                 searchCard();
             }
-
         }
         catch(InputMismatchException a){
             System.out.println("You did not input a number");
             searchCard();
         }
         reader.close();
+    }
+    public void search(){
+        System.out.println("RANDO:"+activeCardIndex);
+        printHand(13,26);
+        int index=binarySearch(13,26,activeCardIndex);
+        System.out.print("Found:");
+        deckArr[index].printCard();
+    }
+    public void activateCard(int n){
+        if(activeCardIndex==-1){
+            activeCardIndex=n;
+            System.out.print("Active card:");
+            deckArr[activeCardIndex].printCard();
+        }
     }
     private void printHand(int start,int end){
         for(int i=start;i<end;i++){
@@ -80,6 +107,7 @@ public class president extends deck{
         }
     }
     private void printCard(int i){
-        System.out.println(i+")"+deckArr[i].cardValue + " of " +deckArr[i].suit);
+        System.out.print(i+")");
+        deckArr[i].printCard();
     }
 }

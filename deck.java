@@ -55,6 +55,40 @@ public class deck {
         swap(index,right,arr);
         return index;
     }
+    public int binarySearch(int l,int r, int x){
+        int mid=l+(r-l)/2;
+        int midCard=deckArr[mid].numValue;
+        int searchCard=deckArr[x].numValue;
+        return binaryCompare(l,r,x,mid,midCard,searchCard);
+    }
+    public int binaryCompare(int l,int r,int x,int mid, int midCard,int searchCard){
+//        System.out.println("mid:"+mid+"\tl:"+l+"\tr:"+r);
+//        System.out.print("Search\t"+searchCard+"\t");
+//        deckArr[x].printCard();
+//        System.out.print("Mid\t\t"+midCard+"\t");
+//        deckArr[mid].printCard();
+        if(r-l==1){
+            if(deckArr[l].numValue>=searchCard){
+                return l;
+            }else{
+                return r;
+            }
+        }else if(r==l){
+            return l;
+        }
+        if(r>=1){
+            if(midCard==searchCard){
+                return mid;
+            }
+            if(midCard>searchCard){
+                return binarySearch(l,mid,x);
+            }
+            if(midCard<searchCard) {
+                return binarySearch(mid+1 , r,x);
+            }
+        }
+        return -1;
+    }
     private void swap(int a,int b,card[] arr){
         card temp=arr[a];
         arr[a]=arr[b];
