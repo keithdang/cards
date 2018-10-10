@@ -22,8 +22,14 @@ public class Main {
         president pres=new president();
         pres.shuffleDeck();
         pres.splitAndOrderCards(4);
-        pres.searchCard();
-        pres.search();
+        for(int i=0;i<5;i++){
+            pres.searchCard();
+            pres.opponentTurn(2);
+            pres.opponentTurn(3);
+            pres.opponentTurn(4);
+        }
+
+
     }
     public static void splitCards(deck deckOb,int splitNum){
         System.out.println("Your hand");

@@ -1,6 +1,7 @@
 package com.company;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 public class president extends deck{
     int activeCardIndex=-1;
 
@@ -44,7 +45,7 @@ public class president extends deck{
         int mid=l+(r-l)/2;
         int midCard=presValues(deckArr[mid].numValue);
         int searchCard=presValues(deckArr[x].numValue);
-        if(deckArr[r].numValue<deckArr[x].numValue){
+        if(presValues( deckArr[r].numValue)<searchCard){
             System.out.println("No cards available");
             return -1;
         }else{
@@ -77,8 +78,9 @@ public class president extends deck{
                 System.out.println("Your hand");
                 printHand(0,12);
                 activateCard(n);
-                //searchCard();
-            }else{
+            }else if(n==99){
+                System.out.println("Skip");
+            } else{
                 System.out.println("Not in range, try again");
                 searchCard();
             }
@@ -87,25 +89,51 @@ public class president extends deck{
             System.out.println("You did not input a number");
             searchCard();
         }
-        reader.close();
+        //reader.close();
     }
-    public void search(){
-        System.out.println("RANDO:"+activeCardIndex);
-        printHand(13,26);
-        int index=binarySearch(13,25,activeCardIndex);
-        if(index!=-1){
-            System.out.print("Found:");
-            deckArr[index].printCard();
+    public void opponentTurn(int oppNum){
+        int start=(oppNum-1)*13;
+        int end=(oppNum)*13;
+        System.out.println("\nActive:"+activeCardIndex);
+        printHand(start,end);
+        if(activeCardIndex>=start && activeCardIndex<=end){
+            System.out.print("Other players could not beat that card");
         }else{
-            System.out.print("No cards available");
+            int index=findBestCard(start,end,activeCardIndex);
+            if(index!=-1){
+                System.out.print("Found:");
+                deckArr[index].printCard();
+                activateCard(index);
+            }else{
+                System.out.print("No cards available");
+            }
         }
     }
+    private int findBestCard(int start,int end,int activeIndex){
+        int index=binarySearch(start,end-1,activeIndex);
+        while(index != -1){
+            if(deckArr[index].active){
+                break;
+            }else{
+                if(index<end-1){
+                    index++;
+                    System.out.println("kdawg increasing index to"+index);
+                }else{
+                    System.out.println("kdawg No cards available");
+                    index=-1;
+                    break;
+                }
+            }
+        }
+        return index;
+    }
     public void activateCard(int n){
-        if(activeCardIndex==-1){
+//        if(activeCardIndex==-1){
             activeCardIndex=n;
             System.out.print("Active card:");
             deckArr[activeCardIndex].printCard();
-        }
+            deckArr[activeCardIndex].setActive(false);
+//        }
     }
     private void printHand(int start,int end){
         for(int i=start;i<end;i++){
