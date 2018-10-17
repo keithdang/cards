@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class presidentArraylist extends deck {
     card activeCard;
+    int turnCount=1;
+    int maxTurn;
     ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
@@ -46,6 +48,7 @@ public class presidentArraylist extends deck {
     }
     public void splitAndOrderCards(int splitNum){
         int ratio=deckArr.length/splitNum;
+        maxTurn=splitNum;
         int start,end,count;
         for(int i=0;i<splitNum;i++){
             start=ratio*i;
@@ -54,7 +57,6 @@ public class presidentArraylist extends deck {
             count=start;
             ArrayList<card> hand=new ArrayList<card>();
             hands.add(hand);
-
             while(count<end){
                 hands.get(hands.size()-1).add(deckArr[count]);
                 count++;
@@ -67,17 +69,14 @@ public class presidentArraylist extends deck {
     }
     public void searchPlayerCard() {
         ArrayList<card> yourHand=hands.get(0);
+        restartTurn();
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter index:");
         try {
             int n = reader.nextInt();
             System.out.println("You chose:" + n);
             if (n >= 0 && n < yourHand.size()) {
-                activeCard = yourHand.get(n);
-                activeCard.printCard();
-                yourHand.remove(n);
-                printHand(yourHand);
-                //printAllHands();
+                selectCard(yourHand,n);
             }
             else if(n==99){
                 System.out.println("Skip");
@@ -99,27 +98,44 @@ public class presidentArraylist extends deck {
 
         }
     }
+    public boolean restartTurn(){
+        if(turnCount<maxTurn){
+            turnCount++;
+            return false;
+        }else{
+            turnCount=1;
+            activeCard=null;
+            return true;
+        }
+    }
     public void oppoonentTurn(int oppNum){
-
         ArrayList<card> oppHand=hands.get(oppNum-1);
-
-            int index=findBestCard(oppHand);
+        int index=0;
+        if(restartTurn()){
+            selectCard(oppHand,index);
+        }else{
+            index=findBestCard(oppHand);
             if(index!=-1){
-                System.out.print("Found:");
-                activeCard=oppHand.get(index);
-                oppHand.remove(index);
-                printHand(oppHand);
+                selectCard(oppHand,index);
             }else{
                 System.out.print("No cards available");
             }
-//        }
+        }
+    }
+    private void selectCard(ArrayList<card> hand,int index){
+        System.out.print("Found:");
+        activeCard=hand.get(index);
+        activeCard.printCard();
+        hand.remove(index);
+        turnCount=1;
+        printHand(hand);
     }
     private int findBestCard(ArrayList<card> oppHand){
         int start=0;
         int end=oppHand.size()-1;
         printHand(oppHand);
         int index=-1;
-        if(oppHand.get(end).numValue>=activeCard.numValue){
+        if(presValues(oppHand.get(end).numValue)>=presValues(activeCard.numValue)){
             index=binarySearch(start,end, oppHand);
         }
         return index;
@@ -132,16 +148,10 @@ public class presidentArraylist extends deck {
             System.out.println("No cards available");
             return -1;
         }else{
-            System.out.println("kdawg");
             return binaryCompare(l,r,mid,midCard,searchCard,hand);
         }
     }
     public int binaryCompare(int l,int r,int mid, int midCard,int searchCard, ArrayList<card> hand){
-//        System.out.println("mid:"+mid+"\tl:"+l+"\tr:"+r);
-//        System.out.print("Search\t"+searchCard+"\t");
-//        deckArr[x].printCard();
-//        System.out.print("Mid\t\t"+midCard+"\t");
-//        deckArr[mid].printCard();
         if(r-l==1){
             if(hand.get(l).numValue>=searchCard){
                 return l;
