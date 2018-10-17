@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class presidentArraylist extends deck {
     card activeCard;
+//    ArrayList<card> activeCards=new ArrayList<card>();
     int turnCount=1;
     int maxTurn;
     int playerTurn=0;
@@ -65,8 +66,7 @@ public class presidentArraylist extends deck {
             if(n==99){
                 System.out.println("Skip");
             }else{
-                int cardVal=util.presidentValues(yourHand.get(n).numValue);
-                if (n >= 0 && n < yourHand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue))) {
+                if (checkValid(n,yourHand)){
                     selectCard(yourHand,n);
                 } else{
                     System.out.println("Not in range, try again");
@@ -82,6 +82,10 @@ public class presidentArraylist extends deck {
             System.out.println("You win!");
             game=false;
         }
+    }
+    private boolean checkValid(int n, ArrayList<card> hand){
+        int cardVal=util.presidentValues(hand.get(n).numValue);
+        return n >= 0 && n < hand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue));
     }
     public void printHand(ArrayList<card> yo){
         System.out.println("\nHand");
