@@ -17,7 +17,7 @@ public class president extends deck{
         }
     }
     private int partition(int left, int right, card [] arr){
-        int pivot=util.presidentValues( arr[right].numValue);
+        int pivot=util.presidentValues(arr[right].numValue);
         int index=left;
         for(int i=left;i<right;i++){
             if(util.presidentValues(arr[i].numValue)<=pivot){
@@ -33,15 +33,6 @@ public class president extends deck{
         arr[a]=arr[b];
         arr[b]=temp;
     }
-//    private int presValues(int num){
-//        if(num==1){
-//            return 14;
-//        }else if(num ==2){
-//            return 15;
-//        }else{
-//            return num;
-//        }
-//    }
     public int binarySearch(int l,int r, int x){
         int mid=l+(r-l)/2;
         int midCard=util.presidentValues(deckArr[mid].numValue);

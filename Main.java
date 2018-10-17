@@ -23,7 +23,7 @@ public class Main {
         presidentArraylist pres=new presidentArraylist();
         pres.shuffleDeck();
         pres.splitAndOrderCards(4);
-        for(int i=0;i<5;i++){
+        while(pres.game){
             pres.searchPlayerCard();
             pres.oppoonentTurn(2);
             pres.oppoonentTurn(3);

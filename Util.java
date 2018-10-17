@@ -19,4 +19,9 @@ public class Util {
             return num;
         }
     }
+    public static void swap(int a,int b,card[] arr){
+        card temp=arr[a];
+        arr[a]=arr[b];
+        arr[b]=temp;
+    }
 }

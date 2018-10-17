@@ -8,6 +8,7 @@ public class presidentArraylist extends deck {
     card activeCard;
     int turnCount=1;
     int maxTurn;
+    boolean game=true;
     Util util=Util.getInstance();
     ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
     public void reorderHand(int start, int end){
@@ -22,31 +23,17 @@ public class presidentArraylist extends deck {
         }
     }
     private int partition(int left, int right, card [] arr){
-        int pivot=util.presidentValues( arr[right].numValue);
+        int pivot=util.presidentValues(arr[right].numValue);
         int index=left;
         for(int i=left;i<right;i++){
             if(util.presidentValues(arr[i].numValue)<=pivot){
-                swap(index,i,arr);
+                util.swap(index,i,arr);
                 index++;
             }
         }
-        swap(index,right,arr);
+        util.swap(index,right,arr);
         return index;
     }
-    private void swap(int a,int b,card[] arr){
-        card temp=arr[a];
-        arr[a]=arr[b];
-        arr[b]=temp;
-    }
-//    private int presValues(int num){
-//        if(num==1){
-//            return 14;
-//        }else if(num ==2){
-//            return 15;
-//        }else{
-//            return num;
-//        }
-//    }
     public void splitAndOrderCards(int splitNum){
         int ratio=deckArr.length/splitNum;
         maxTurn=splitNum;
@@ -62,37 +49,46 @@ public class presidentArraylist extends deck {
                 hands.get(hands.size()-1).add(deckArr[count]);
                 count++;
             }
-            if(i==0){
-                printHand(hands.get(i));
-            }
+//            if(i==0){
+//                printHand(hands.get(i));
+//            }
         }
         //printAllHands();
     }
     public void searchPlayerCard() {
         ArrayList<card> yourHand=hands.get(0);
+        printHand(yourHand);
         restartTurn();
         Scanner reader = new Scanner(System.in);
-        System.out.println("Enter index:");
+        System.out.println("\nEnter index:");
         try {
             int n = reader.nextInt();
             System.out.println("You chose:" + n);
-            if (n >= 0 && n < yourHand.size()) {
+            if(n==99){
+                System.out.println("Skip");
+            }else{
+
+
+            int cardVal=util.presidentValues(yourHand.get(n).numValue);
+            if (n >= 0 && n < yourHand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue))) {
                 selectCard(yourHand,n);
             }
-            else if(n==99){
-                System.out.println("Skip");
-            } else{
+           else{
                 System.out.println("Not in range, try again");
                 searchPlayerCard();
-           }
+           }}
         }
         catch(InputMismatchException a){
             System.out.println("You did not input a number");
             searchPlayerCard();
         }
+        if(yourHand.size()<1){
+            System.out.println("You win!");
+            game=false;
+        }
     }
     public void printHand(ArrayList<card> yo){
-        System.out.println("Hand");
+        System.out.println("\nHand");
         for(int i=0;i<yo.size();i++){
             System.out.print(i+")");
             yo.get(i).printCard();
@@ -112,24 +108,30 @@ public class presidentArraylist extends deck {
     public void oppoonentTurn(int oppNum){
         ArrayList<card> oppHand=hands.get(oppNum-1);
         int index=0;
-        if(restartTurn()){
-            selectCard(oppHand,index);
-        }else{
-            index=findBestCard(oppHand);
-            if(index!=-1){
-                selectCard(oppHand,index);
-            }else{
-                System.out.print("No cards available");
+        if(game) {
+            if (restartTurn()) {
+                selectCard(oppHand, index);
+            } else {
+                index = findBestCard(oppHand);
+                if (index != -1) {
+                    selectCard(oppHand, index);
+                } else {
+                    System.out.print("No cards available");
+                }
+            }
+            if (oppHand.size() < 1) {
+                System.out.println("You lose!");
+                game = false;
             }
         }
     }
     private void selectCard(ArrayList<card> hand,int index){
-        System.out.print("Found:");
+        System.out.print("\nFound:");
         activeCard=hand.get(index);
         activeCard.printCard();
         hand.remove(index);
         turnCount=1;
-        printHand(hand);
+        //printHand(hand);
     }
     private int findBestCard(ArrayList<card> oppHand){
         int start=0;

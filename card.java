@@ -30,6 +30,6 @@ public class card {
         }
     }
     public void printCard(){
-        System.out.print(cardValue + " of "+suit+"\n");
+        System.out.print(cardValue + " of "+suit+"\t");
     }
 }
