@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class president extends deck{
     int activeCardIndex=-1;
-
+    Util util=Util.getInstance();
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
     }
@@ -17,10 +17,10 @@ public class president extends deck{
         }
     }
     private int partition(int left, int right, card [] arr){
-        int pivot=presValues( arr[right].numValue);
+        int pivot=util.presidentValues( arr[right].numValue);
         int index=left;
         for(int i=left;i<right;i++){
-            if(presValues(arr[i].numValue)<=pivot){
+            if(util.presidentValues(arr[i].numValue)<=pivot){
                 swap(index,i,arr);
                 index++;
             }
@@ -33,20 +33,20 @@ public class president extends deck{
         arr[a]=arr[b];
         arr[b]=temp;
     }
-    private int presValues(int num){
-        if(num==1){
-            return 14;
-        }else if(num ==2){
-            return 15;
-        }else{
-            return num;
-        }
-    }
+//    private int presValues(int num){
+//        if(num==1){
+//            return 14;
+//        }else if(num ==2){
+//            return 15;
+//        }else{
+//            return num;
+//        }
+//    }
     public int binarySearch(int l,int r, int x){
         int mid=l+(r-l)/2;
-        int midCard=presValues(deckArr[mid].numValue);
-        int searchCard=presValues(deckArr[x].numValue);
-        if(presValues( deckArr[r].numValue)<searchCard){
+        int midCard=util.presidentValues(deckArr[mid].numValue);
+        int searchCard=util.presidentValues(deckArr[x].numValue);
+        if(util.presidentValues( deckArr[r].numValue)<searchCard){
             System.out.println("No cards available");
             return -1;
         }else{

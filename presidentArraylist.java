@@ -8,6 +8,7 @@ public class presidentArraylist extends deck {
     card activeCard;
     int turnCount=1;
     int maxTurn;
+    Util util=Util.getInstance();
     ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
@@ -21,10 +22,10 @@ public class presidentArraylist extends deck {
         }
     }
     private int partition(int left, int right, card [] arr){
-        int pivot=presValues( arr[right].numValue);
+        int pivot=util.presidentValues( arr[right].numValue);
         int index=left;
         for(int i=left;i<right;i++){
-            if(presValues(arr[i].numValue)<=pivot){
+            if(util.presidentValues(arr[i].numValue)<=pivot){
                 swap(index,i,arr);
                 index++;
             }
@@ -37,15 +38,15 @@ public class presidentArraylist extends deck {
         arr[a]=arr[b];
         arr[b]=temp;
     }
-    private int presValues(int num){
-        if(num==1){
-            return 14;
-        }else if(num ==2){
-            return 15;
-        }else{
-            return num;
-        }
-    }
+//    private int presValues(int num){
+//        if(num==1){
+//            return 14;
+//        }else if(num ==2){
+//            return 15;
+//        }else{
+//            return num;
+//        }
+//    }
     public void splitAndOrderCards(int splitNum){
         int ratio=deckArr.length/splitNum;
         maxTurn=splitNum;
@@ -135,16 +136,16 @@ public class presidentArraylist extends deck {
         int end=oppHand.size()-1;
         printHand(oppHand);
         int index=-1;
-        if(presValues(oppHand.get(end).numValue)>=presValues(activeCard.numValue)){
+        if(util.presidentValues(oppHand.get(end).numValue)>=util.presidentValues(activeCard.numValue)){
             index=binarySearch(start,end, oppHand);
         }
         return index;
     }
     public int binarySearch(int l,int r, ArrayList<card> hand){
         int mid=l+(r-l)/2;
-        int midCard=presValues(hand.get(mid).numValue);
-        int searchCard=presValues(activeCard.numValue);
-        if(presValues(hand.get(r).numValue)<searchCard){
+        int midCard=util.presidentValues(hand.get(mid).numValue);
+        int searchCard=util.presidentValues(activeCard.numValue);
+        if(util.presidentValues(hand.get(r).numValue)<searchCard){
             System.out.println("No cards available");
             return -1;
         }else{
