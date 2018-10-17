@@ -1,0 +1,188 @@
+package com.company;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class presidentArraylist extends deck {
+    card activeCard;
+    ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
+    public void reorderHand(int start, int end){
+        quickSort(start,end-1,deckArr);
+    }
+
+    private void quickSort(int left, int right,card []arr){
+        if(left<right){
+            int partition=partition(left,right,arr);
+            quickSort(left,partition-1,arr);
+            quickSort(partition+1,right,arr);
+        }
+    }
+    private int partition(int left, int right, card [] arr){
+        int pivot=presValues( arr[right].numValue);
+        int index=left;
+        for(int i=left;i<right;i++){
+            if(presValues(arr[i].numValue)<=pivot){
+                swap(index,i,arr);
+                index++;
+            }
+        }
+        swap(index,right,arr);
+        return index;
+    }
+    private void swap(int a,int b,card[] arr){
+        card temp=arr[a];
+        arr[a]=arr[b];
+        arr[b]=temp;
+    }
+    private int presValues(int num){
+        if(num==1){
+            return 14;
+        }else if(num ==2){
+            return 15;
+        }else{
+            return num;
+        }
+    }
+    public void splitAndOrderCards(int splitNum){
+        int ratio=deckArr.length/splitNum;
+        int start,end,count;
+        for(int i=0;i<splitNum;i++){
+            start=ratio*i;
+            end=ratio*(i+1);
+            reorderHand(start,end);
+            count=start;
+            ArrayList<card> hand=new ArrayList<card>();
+            hands.add(hand);
+
+            while(count<end){
+                hands.get(hands.size()-1).add(deckArr[count]);
+                count++;
+            }
+            if(i==0){
+                printHand(hands.get(i));
+            }
+        }
+        //printAllHands();
+    }
+    public void searchPlayerCard() {
+        ArrayList<card> yourHand=hands.get(0);
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter index:");
+        try {
+            int n = reader.nextInt();
+            System.out.println("You chose:" + n);
+            if (n >= 0 && n < yourHand.size()) {
+                activeCard = yourHand.get(n);
+                activeCard.printCard();
+                yourHand.remove(n);
+                printHand(yourHand);
+                //printAllHands();
+            }
+            else if(n==99){
+                System.out.println("Skip");
+            } else{
+                System.out.println("Not in range, try again");
+                searchPlayerCard();
+           }
+        }
+        catch(InputMismatchException a){
+            System.out.println("You did not input a number");
+            searchPlayerCard();
+        }
+    }
+    public void printHand(ArrayList<card> yo){
+        System.out.println("Hand");
+        for(int i=0;i<yo.size();i++){
+            System.out.print(i+")");
+            yo.get(i).printCard();
+
+        }
+    }
+    public void oppoonentTurn(int oppNum){
+
+        ArrayList<card> oppHand=hands.get(oppNum-1);
+
+            int index=findBestCard(oppHand);
+            if(index!=-1){
+                System.out.print("Found:");
+                activeCard=oppHand.get(index);
+                oppHand.remove(index);
+                printHand(oppHand);
+            }else{
+                System.out.print("No cards available");
+            }
+//        }
+    }
+    private int findBestCard(ArrayList<card> oppHand){
+        int start=0;
+        int end=oppHand.size()-1;
+        printHand(oppHand);
+        int index=-1;
+        if(oppHand.get(end).numValue>=activeCard.numValue){
+            index=binarySearch(start,end, oppHand);
+        }
+        return index;
+    }
+    public int binarySearch(int l,int r, ArrayList<card> hand){
+        int mid=l+(r-l)/2;
+        int midCard=presValues(hand.get(mid).numValue);
+        int searchCard=presValues(activeCard.numValue);
+        if(presValues(hand.get(r).numValue)<searchCard){
+            System.out.println("No cards available");
+            return -1;
+        }else{
+            System.out.println("kdawg");
+            return binaryCompare(l,r,mid,midCard,searchCard,hand);
+        }
+    }
+    public int binaryCompare(int l,int r,int mid, int midCard,int searchCard, ArrayList<card> hand){
+//        System.out.println("mid:"+mid+"\tl:"+l+"\tr:"+r);
+//        System.out.print("Search\t"+searchCard+"\t");
+//        deckArr[x].printCard();
+//        System.out.print("Mid\t\t"+midCard+"\t");
+//        deckArr[mid].printCard();
+        if(r-l==1){
+            if(hand.get(l).numValue>=searchCard){
+                return l;
+            }else{
+                return r;
+            }
+        }else if(r==l){
+            return l;
+        }
+        if(r>=1){
+            if(midCard==searchCard){
+                return mid;
+            }
+            if(midCard>searchCard){
+                return binarySearch(l,mid,hand);
+            }
+            if(midCard<searchCard) {
+                return binarySearch(mid+1 , r,hand);
+            }
+        }
+        return -1;
+    }
+    public void hello(){
+        ArrayList<Integer> yo=new ArrayList<Integer>();
+        int []arr={5,1,2,3};
+        yo.add(arr[0]);
+        yo.add(arr[1]);
+        yo.add(arr[2]);
+        yo.add(arr[3]);
+        yo.remove(2);
+        for(int i=0;i<yo.size();i++){
+            System.out.println(yo.get(i));
+        }
+    }
+    public void printAllHands(){
+        for(int i=0;i<hands.size();i++){
+            printHand(hands.get(i));
+        }
+    }
+    private void printCard(int i){
+        System.out.print(i+")");
+        deckArr[i].printCard();
+    }
+}

@@ -3,11 +3,12 @@ import sun.util.locale.provider.SPILocaleProviderAdapter;
 
 import java.util.Collections;
 import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        president();
+        president2();
     }
     public static void normal(){
         deck deckOb=new deck();
@@ -17,6 +18,14 @@ public class Main {
         //deckOb.printDeck();
         deckOb.reorderHand(0,13);
         splitCards(deckOb,4);
+    }
+    public static void president2(){
+        presidentArraylist pres=new presidentArraylist();
+        pres.shuffleDeck();
+        pres.splitAndOrderCards(4);
+        pres.searchPlayerCard();
+        pres.oppoonentTurn(2);
+        pres.oppoonentTurn(3);
     }
     public static void president(){
         president pres=new president();
@@ -28,8 +37,6 @@ public class Main {
             pres.opponentTurn(3);
             pres.opponentTurn(4);
         }
-
-
     }
     public static void splitCards(deck deckOb,int splitNum){
         System.out.println("Your hand");

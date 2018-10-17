@@ -8,6 +8,7 @@ public class president extends deck{
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
     }
+
     private void quickSort(int left, int right,card []arr){
         if(left<right){
             int partition=partition(left,right,arr);
