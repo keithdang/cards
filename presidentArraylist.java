@@ -8,6 +8,7 @@ public class presidentArraylist extends deck {
     card activeCard;
     int turnCount=1;
     int maxTurn;
+    int playerTurn=0;
     boolean game=true;
     Util util=Util.getInstance();
     ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
@@ -49,14 +50,11 @@ public class presidentArraylist extends deck {
                 hands.get(hands.size()-1).add(deckArr[count]);
                 count++;
             }
-//            if(i==0){
-//                printHand(hands.get(i));
-//            }
         }
-        //printAllHands();
     }
     public void searchPlayerCard() {
-        ArrayList<card> yourHand=hands.get(0);
+        playerTurn=0;
+        ArrayList<card> yourHand=hands.get(playerTurn);
         printHand(yourHand);
         restartTurn();
         Scanner reader = new Scanner(System.in);
@@ -67,16 +65,14 @@ public class presidentArraylist extends deck {
             if(n==99){
                 System.out.println("Skip");
             }else{
-
-
-            int cardVal=util.presidentValues(yourHand.get(n).numValue);
-            if (n >= 0 && n < yourHand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue))) {
-                selectCard(yourHand,n);
+                int cardVal=util.presidentValues(yourHand.get(n).numValue);
+                if (n >= 0 && n < yourHand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue))) {
+                    selectCard(yourHand,n);
+                } else{
+                    System.out.println("Not in range, try again");
+                    searchPlayerCard();
+                }
             }
-           else{
-                System.out.println("Not in range, try again");
-                searchPlayerCard();
-           }}
         }
         catch(InputMismatchException a){
             System.out.println("You did not input a number");
@@ -106,10 +102,11 @@ public class presidentArraylist extends deck {
         }
     }
     public void oppoonentTurn(int oppNum){
-        ArrayList<card> oppHand=hands.get(oppNum-1);
+        playerTurn=oppNum;
+        ArrayList<card> oppHand=hands.get(playerTurn-1);
         int index=0;
         if(game) {
-            if (restartTurn()) {
+            if (restartTurn() || activeCard==null) {
                 selectCard(oppHand, index);
             } else {
                 index = findBestCard(oppHand);
@@ -127,11 +124,24 @@ public class presidentArraylist extends deck {
     }
     private void selectCard(ArrayList<card> hand,int index){
         System.out.print("\nFound:");
-        activeCard=hand.get(index);
-        activeCard.printCard();
-        hand.remove(index);
-        turnCount=1;
-        //printHand(hand);
+        if(activeCard!=null && hand.get(index).numValue==activeCard.numValue){
+            System.out.println("Burn");
+            hand.get(index).printCard();
+            activeCard=null;
+            hand.remove(index);
+            turnCount=1;
+            if(playerTurn==0){
+                searchPlayerCard();
+            }else{
+                oppoonentTurn(playerTurn);
+            }
+        }else{
+            activeCard=hand.get(index);
+            activeCard.printCard();
+            hand.remove(index);
+            turnCount=1;
+        }
+
     }
     private int findBestCard(ArrayList<card> oppHand){
         int start=0;
