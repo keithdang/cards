@@ -5,8 +5,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class presidentArraylist extends deck {
-    card activeCard;
-//    ArrayList<card> activeCards=new ArrayList<card>();
+//    card activeCard;
+    ArrayList<card> activeCards=new ArrayList<card>();
     int turnCount=1;
     int maxTurn;
     int playerTurn=0;
@@ -85,7 +85,8 @@ public class presidentArraylist extends deck {
     }
     private boolean checkValid(int n, ArrayList<card> hand){
         int cardVal=util.presidentValues(hand.get(n).numValue);
-        return n >= 0 && n < hand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue));
+        return n >= 0 && n < hand.size() && (activeCards.size()==0 || cardVal>=util.presidentValues(activeCards.get(0).numValue));
+//        return n >= 0 && n < hand.size() && (activeCard==null || cardVal>=util.presidentValues(activeCard.numValue));
     }
     public void printHand(ArrayList<card> yo){
         System.out.println("\nHand");
@@ -101,7 +102,7 @@ public class presidentArraylist extends deck {
             return false;
         }else{
             turnCount=1;
-            activeCard=null;
+            activeCards.clear();
             return true;
         }
     }
@@ -110,7 +111,7 @@ public class presidentArraylist extends deck {
         ArrayList<card> oppHand=hands.get(playerTurn-1);
         int index=0;
         if(game) {
-            if (restartTurn() || activeCard==null) {
+            if (restartTurn() || activeCards.size()==0) {
                 selectCard(oppHand, index);
             } else {
                 index = findBestCard(oppHand);
@@ -128,10 +129,10 @@ public class presidentArraylist extends deck {
     }
     private void selectCard(ArrayList<card> hand,int index){
         System.out.print("\nFound:");
-        if(activeCard!=null && hand.get(index).numValue==activeCard.numValue){
+        if(activeCards.size()>0 && hand.get(index).numValue==activeCards.get(0).numValue){
             System.out.println("Burn");
             hand.get(index).printCard();
-            activeCard=null;
+            activeCards.clear();
             hand.remove(index);
             turnCount=1;
             if(playerTurn==0){
@@ -140,8 +141,9 @@ public class presidentArraylist extends deck {
                 oppoonentTurn(playerTurn);
             }
         }else{
-            activeCard=hand.get(index);
-            activeCard.printCard();
+            activeCards.clear();
+            activeCards.add(hand.get(index));
+            activeCards.get(0).printCard();
             hand.remove(index);
             turnCount=1;
         }
@@ -152,7 +154,7 @@ public class presidentArraylist extends deck {
         int end=oppHand.size()-1;
         printHand(oppHand);
         int index=-1;
-        if(util.presidentValues(oppHand.get(end).numValue)>=util.presidentValues(activeCard.numValue)){
+        if(util.presidentValues(oppHand.get(end).numValue)>=util.presidentValues(activeCards.get(0).numValue)){
             index=binarySearch(start,end, oppHand);
         }
         return index;
@@ -160,9 +162,8 @@ public class presidentArraylist extends deck {
     public int binarySearch(int l,int r, ArrayList<card> hand){
         int mid=l+(r-l)/2;
         int midCard=util.presidentValues(hand.get(mid).numValue);
-        int searchCard=util.presidentValues(activeCard.numValue);
+        int searchCard=util.presidentValues(activeCards.get(0).numValue);
         if(util.presidentValues(hand.get(r).numValue)<searchCard){
-            System.out.println("No cards available");
             return -1;
         }else{
             return binaryCompare(l,r,mid,midCard,searchCard,hand);
