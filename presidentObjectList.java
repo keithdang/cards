@@ -1,18 +1,28 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.ArrayList;
 
-public class presidentArraylist extends deck {
-//    card activeCard;
+public class presidentObjectList extends deck{
+
     ArrayList<card> activeCards=new ArrayList<card>();
     int turnCount=1;
     int maxTurn;
     int playerTurn=0;
     boolean game=true;
     Util util=Util.getInstance();
-    ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
+    //ArrayList<ArrayList<card>> hands=new ArrayList<ArrayList<card>>();
+    ArrayList<player> players=new ArrayList<player>();
+    public void hello(){
+        printPlayers();
+    }
+    public void printPlayers(){
+        for(int i=0;i<players.size();i++){
+            players.get(i).printPlayer();
+            printHand(players.get(i).hand);
+        }
+    }
     public void reorderHand(int start, int end){
         quickSort(start,end-1,deckArr);
     }
@@ -46,16 +56,18 @@ public class presidentArraylist extends deck {
             reorderHand(start,end);
             count=start;
             ArrayList<card> hand=new ArrayList<card>();
-            hands.add(hand);
+            //hands.add(hand);
+            players.add(new player(i,hand));
             while(count<end){
-                hands.get(hands.size()-1).add(deckArr[count]);
+                //hands.get(hands.size()-1).add(deckArr[count]);
+                players.get(players.size()-1).hand.add(deckArr[count]);
                 count++;
             }
         }
     }
     public void searchPlayerCard() {
         playerTurn=0;
-        ArrayList<card> yourHand=hands.get(playerTurn);
+        ArrayList<card> yourHand=players.get(playerTurn).hand;//hands.get(playerTurn);
         printHand(yourHand);
         restartTurn();
         Scanner reader = new Scanner(System.in);
@@ -107,7 +119,7 @@ public class presidentArraylist extends deck {
     }
     public void oppoonentTurn(int oppNum){
         playerTurn=oppNum;
-        ArrayList<card> oppHand=hands.get(playerTurn-1);
+        ArrayList<card> oppHand=players.get(playerTurn-1).hand;//hands.get(playerTurn-1);
         int index=0;
         if(game) {
             if (restartTurn() || activeCards.size()==0) {
@@ -191,23 +203,12 @@ public class presidentArraylist extends deck {
         }
         return -1;
     }
-    public void hello(){
-        ArrayList<Integer> yo=new ArrayList<Integer>();
-        int []arr={5,1,2,3};
-        yo.add(arr[0]);
-        yo.add(arr[1]);
-        yo.add(arr[2]);
-        yo.add(arr[3]);
-        yo.remove(2);
-        for(int i=0;i<yo.size();i++){
-            System.out.println(yo.get(i));
-        }
-    }
-    public void printAllHands(){
-        for(int i=0;i<hands.size();i++){
-            printHand(hands.get(i));
-        }
-    }
+
+//    public void printAllHands(){
+//        for(int i=0;i<hands.size();i++){
+//            printHand(hands.get(i));
+//        }
+//    }
     private void printCard(int i){
         System.out.print(i+")");
         deckArr[i].printCard();

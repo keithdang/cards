@@ -8,7 +8,8 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        president2();
+//        president2();
+        presidentObjects();
     }
     public static void normal(){
         deck deckOb=new deck();
@@ -18,6 +19,18 @@ public class Main {
         //deckOb.printDeck();
         deckOb.reorderHand(0,13);
         splitCards(deckOb,4);
+    }
+    public static void presidentObjects(){
+        presidentObjectList pres=new presidentObjectList();
+        pres.shuffleDeck();
+        pres.splitAndOrderCards(4);
+        pres.hello();
+        while(pres.game){
+            pres.searchPlayerCard();
+            pres.oppoonentTurn(2);
+            pres.oppoonentTurn(3);
+            pres.oppoonentTurn(4);
+        }
     }
     public static void president2(){
         presidentArraylist pres=new presidentArraylist();
