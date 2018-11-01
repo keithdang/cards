@@ -24,12 +24,12 @@ public class Main {
         presidentObjectList pres=new presidentObjectList();
         pres.shuffleDeck();
         pres.splitAndOrderCards(4);
-        pres.hello();
+        pres.initialize();
         while(pres.game){
             pres.searchPlayerCard();
-            pres.oppoonentTurn(2);
-            pres.oppoonentTurn(3);
-            pres.oppoonentTurn(4);
+            pres.opponentTurn(2);
+            pres.opponentTurn(3);
+            pres.opponentTurn(4);
         }
     }
     public static void president2(){

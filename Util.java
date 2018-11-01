@@ -24,4 +24,11 @@ public class Util {
         arr[a]=arr[b];
         arr[b]=temp;
     }
+    public static int[] stringArrToInt(String[] arrWord){
+        int[] arr=new int[arrWord.length];
+        for(int i=0;i<arrWord.length;i++){
+            arr[i]=Integer.parseInt(arrWord[i]);
+        }
+        return arr;
+    }
 }
